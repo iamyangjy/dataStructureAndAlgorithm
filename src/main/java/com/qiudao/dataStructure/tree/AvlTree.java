@@ -10,42 +10,42 @@ public class AvlTree<T extends Comparable<? super T>> {
 
     /**
      * AVLNode AvlTree的节点，保存AvlTree的element
-     * @param <T>
+     * @param
      */
-    protected static class AvlNode<T>{
+    private class AvlNode{
 
         /**
          * node的data
          */
-        protected T element;
+        private T element;
 
         /**
          * node的左儿子
          */
-        protected AvlNode<T> left;
+        private AvlNode left;
 
         /**
          * node的右儿子
          */
-        protected AvlNode<T> right;
+        private AvlNode right;
 
         /**
          * node的高度
          */
-        protected int height;
+        private int height;
 
         public AvlNode(T element){
             this(element, null, null);
         }
 
-        public AvlNode(T element, AvlNode<T> left, AvlNode<T> right){
+        public AvlNode(T element, AvlNode left, AvlNode right){
             this.element = element;
             this.left = left;
             this.right = right;
         }
     }
 
-    public AvlNode<T> root;
+    public AvlNode root;
 
     /**
      * AvlTree 构造函数
@@ -59,7 +59,7 @@ public class AvlTree<T extends Comparable<? super T>> {
      * @param t
      * @return
      */
-    public int height(AvlNode<T> t){
+    public int height(AvlNode t){
         return t == null ? -1:t.height;
     }
 
@@ -99,9 +99,9 @@ public class AvlTree<T extends Comparable<? super T>> {
      * @return
      * @throws Exception
      */
-    private AvlNode<T> insert(T x, AvlNode<T> t) throws Exception{
+    private AvlNode insert(T x, AvlNode t) throws Exception{
         if(t==null){
-            t = new AvlNode<T>(x);
+            t = new AvlNode(x);
         } else if(x.compareTo(t.element)<0){
             t.left = insert(x, t.left);
             if(height(t.left) - height(t.right) == 2){
@@ -133,8 +133,8 @@ public class AvlTree<T extends Comparable<? super T>> {
      * @param t
      * @return
      */
-    private AvlNode<T> rotateWithLeftChild(AvlNode<T> t){
-        AvlNode<T> tLeft = t.left;
+    private AvlNode rotateWithLeftChild(AvlNode t){
+        AvlNode tLeft = t.left;
         t.left = tLeft.right;
         tLeft.right = t;
         t.height = max(height(t.left), height(t.right)) + 1;
@@ -147,8 +147,8 @@ public class AvlTree<T extends Comparable<? super T>> {
      * @param t
      * @return
      */
-    private AvlNode<T> rotateWithRightChild(AvlNode<T> t){
-        AvlNode<T> tRight = t.right;
+    private AvlNode rotateWithRightChild(AvlNode t){
+        AvlNode tRight = t.right;
         t.right = tRight.left;
         tRight.left = t;
 
@@ -162,7 +162,7 @@ public class AvlTree<T extends Comparable<? super T>> {
      * @param t
      * @return
      */
-    private AvlNode<T> doubleWithLeftChild(AvlNode<T> t){
+    private AvlNode doubleWithLeftChild(AvlNode t){
         t.left = rotateWithRightChild(t.left);
         return rotateWithLeftChild(t);
     }
@@ -172,7 +172,7 @@ public class AvlTree<T extends Comparable<? super T>> {
      * @param t
      * @return
      */
-    private AvlNode<T> doubleWithRightChild(AvlNode<T> t){
+    private AvlNode doubleWithRightChild(AvlNode t){
         t.right = rotateWithLeftChild(t.right);
         return rotateWithRightChild(t);
     }
@@ -209,7 +209,7 @@ public class AvlTree<T extends Comparable<? super T>> {
      * @param t
      * @return
      */
-    private AvlNode<T> findMin(AvlNode<T> t){
+    private AvlNode findMin(AvlNode t){
         if(t == null){
             return t;
         }
@@ -235,7 +235,7 @@ public class AvlTree<T extends Comparable<? super T>> {
      * @param t
      * @return
      */
-    private AvlNode<T> findMax(AvlNode<T> t){
+    private AvlNode findMax(AvlNode t){
         if(t == null){
             return null;
         }
@@ -261,7 +261,7 @@ public class AvlTree<T extends Comparable<? super T>> {
      * @param t
      * @return
      */
-    private boolean contains(T x, AvlNode<T> t){
+    private boolean contains(T x, AvlNode t){
         if(t == null){
             return false;
         }else if(x.compareTo(t.element)<0){
@@ -290,7 +290,7 @@ public class AvlTree<T extends Comparable<? super T>> {
      * @param str
      * @param sep
      */
-    public void serializeInfix(AvlNode<T> t, StringBuilder str, String sep){
+    public void serializeInfix(AvlNode t, StringBuilder str, String sep){
         if(t != null){
             serializeInfix(t.left, str, sep);
             str.append(t.element.toString());
@@ -307,7 +307,7 @@ public class AvlTree<T extends Comparable<? super T>> {
         root = remove(x, root);
     }
 
-    public AvlNode<T> remove(T x, AvlNode<T> t){
+    public AvlNode remove(T x, AvlNode t){
         if(t==null){
             System.out.println("Sorry but you're mistaken, " + t + " does't exist in this tree");
             return null;
@@ -378,7 +378,7 @@ public class AvlTree<T extends Comparable<? super T>> {
      * @param str
      * @param sep
      */
-    public void serializePrefix(AvlNode<T> t, StringBuilder str, String sep){
+    public void serializePrefix(AvlNode t, StringBuilder str, String sep){
         if(t != null){
             str.append(t.element.toString());
             str.append(sep);
