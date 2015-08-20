@@ -300,6 +300,69 @@ public class AvlTree<T extends Comparable<? super T>> {
     }
 
     /**
+     * 删除node
+     * @param x
+     */
+    public void remove(T x){
+        root = remove(x, root);
+    }
+
+    public AvlNode<T> remove(T x, AvlNode<T> t){
+        if(t==null){
+            System.out.println("Sorry but you're mistaken, " + t + " does't exist in this tree");
+            return null;
+        }
+        System.out.println("Remove starts... " + t.element + " doesn't exist");
+
+        if(x.compareTo(t.element) < 0){
+            t.left = remove(x, t.left);
+            int l = t.left != null ? t.left.height : 0;
+            if((t.right != null)  && (t.right.height - 1 >= 2)){
+                int rightHeight = t.right.right != null ? t.right.right.height : 0;
+                int leftHeight = t.right.left != null ? t.right.left.height : 0;
+
+                if(rightHeight >= leftHeight){
+                    t = rotateWithLeftChild(t);
+                }else{
+                    t = doubleWithRightChild(t);
+                }
+            }
+        }else if(x.compareTo(t.element) > 0){
+            t.right = remove(x, t.right);
+            int r = t.right != null ? t.right.height : 0;
+            if((t.left != null) && (t.left.height -r >= 2)){
+                int leftHeight = t.left.left != null ? t.left.left.height : 0;
+                int rightHeight = t.left.right != null ? t.left.right.height : 0;
+                if(leftHeight >= rightHeight){
+                    t = rotateWithRightChild(t);
+                }else{
+                    t = doubleWithLeftChild(t);
+                }
+            }
+        }else if(t.left != null){
+            t.element = findMax(t.left).element;
+            remove(t.element, t.left);
+            if((t.right != null) && (t.right.height - t.left.height >= 2)){
+                int rightHeight = t.right.right != null ? t.right.right.height : 0;
+                int leftHeight = t.right.left != null ? t.right.left.height : 0;
+                if(rightHeight >= leftHeight){
+                    t = rotateWithLeftChild(t);
+                }else{
+                    t = doubleWithRightChild(t);
+                }
+            }
+        }else{
+            t = (t.left != null ? t.left : t.right);
+        }
+        if(t != null){
+            int leftHeight = t.left != null ? t.left.height : 0;
+            int rightHeight = t.right != null ? t.right.height : 0;
+            t.height = Math.max(leftHeight, rightHeight) + 1;
+        }
+        return t;
+    }
+
+    /**
      * 前序遍历
      * @return
      */
@@ -349,6 +412,13 @@ public class AvlTree<T extends Comparable<? super T>> {
 
         System.out.println("max:" + t.findMax());
         System.out.println("min:" + t.findMin());
+
+        t.remove(6);
+        System.out.println("Prefix Traversal:");
+        System.out.println(t.serializePrefix());
+        System.out.println("Infix Traversal");
+        System.out.println(t.serializeInfix());
+
     }
 
 }
