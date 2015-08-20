@@ -11,27 +11,27 @@ public class AvlTree<T extends Comparable<? super T>> {
      * AVLNode AvlTree的节点，保存AvlTree的element
      * @param <T>
      */
-    private static class AvlNode<T>{
+    protected static class AvlNode<T>{
 
         /**
          * node的data
          */
-        private T element;
+        protected T element;
 
         /**
          * node的左儿子
          */
-        private AvlNode<T> left;
+        protected AvlNode<T> left;
 
         /**
          * node的右儿子
          */
-        private AvlNode<T> right;
+        protected AvlNode<T> right;
 
         /**
          * node的高度
          */
-        private int height;
+        protected int height;
 
         public AvlNode(T element){
             this(element, null, null);
@@ -86,6 +86,7 @@ public class AvlTree<T extends Comparable<? super T>> {
             root = insert(x, root);
             return true;
         }catch (Exception e){
+            e.printStackTrace();
             return false;
         }
     }
@@ -122,7 +123,7 @@ public class AvlTree<T extends Comparable<? super T>> {
             throw new Exception("数据已经存在，插入失败");
         }
 
-        t.height = max(t.left.height, t.right.height) + 1;
+        t.height = max(height(t.left), height(t.right)) + 1;
         return t;
     }
 
@@ -233,7 +234,7 @@ public class AvlTree<T extends Comparable<? super T>> {
      * @param t
      * @return
      */
-    public AvlNode<T> findMax(AvlNode<T> t){
+    private AvlNode<T> findMax(AvlNode<T> t){
         if(t == null){
             return null;
         }
@@ -262,11 +263,10 @@ public class AvlTree<T extends Comparable<? super T>> {
     private boolean contains(T x, AvlNode<T> t){
         if(t == null){
             return false;
-        }
-        if(x.compareTo(t.element)<0){
-            contains(x, t.left);
+        }else if(x.compareTo(t.element)<0){
+            return contains(x, t.left);
         }else if(x.compareTo(t.element)>0){
-            contains(x, t.right);
+            return contains(x, t.right);
         }
 
         return true;
@@ -294,15 +294,60 @@ public class AvlTree<T extends Comparable<? super T>> {
             serializeInfix(t.left, str, sep);
             str.append(t.element.toString());
             str.append(sep);
-            serializeInfix(t.left, str, sep);
+            serializeInfix(t.right, str, sep);
         }
     }
 
-    //public String serialize
+    /**
+     * 前序遍历
+     * @return
+     */
+    public String serializePrefix(){
+        StringBuilder str = new StringBuilder();
+        serializePrefix(root, str, ",");
+        return str.toString();
+    }
+
+    /**
+     * 递归实现前序遍历
+     * @param t
+     * @param str
+     * @param sep
+     */
+    public void serializePrefix(AvlNode<T> t, StringBuilder str, String sep){
+        if(t != null){
+            str.append(t.element.toString());
+            str.append(sep);
+            serializePrefix(t.left, str, sep);
+            serializePrefix(t.right, str, sep);
+        }
+    }
 
 
+    public static void main(String[] args){
+        AvlTree<Integer> t = new AvlTree<Integer>();
+        t.insert(2);
+        t.insert(1);
+        t.insert(4);
+        t.insert(5);
+        t.insert(9);
+        t.insert(3);
+        t.insert(6);
+        t.insert(7);
+        System.out.println();
 
+        System.out.println("Prefix Traversal:");
+        System.out.println(t.serializePrefix());
+        System.out.println("Infix Traversal");
+        System.out.println(t.serializeInfix());
 
+        System.out.println("contains:" + 9);
+        System.out.println(t.contains(9));
+        System.out.println("contains:" + 10);
+        System.out.println(t.contains(10));
 
+        System.out.println("max:" + t.findMax());
+        System.out.println("min:" + t.findMin());
+    }
 
 }
