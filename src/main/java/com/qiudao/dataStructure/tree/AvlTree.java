@@ -4,6 +4,7 @@ package com.qiudao.dataStructure.tree;
  * AVL Tree, 平衡二叉树的一种。
  * 基于Mark Allen Weiss的数据结构与算法java实现的书本。
  * 参考代码：https://github.com/justinethier/AVL-Tree/blob/master/AvlTree.java
+ *         https://github.com/CherylRuo/BST-AVL-and-Splay-Trees/blob/master/AvlTree.java
  * @Author yangjy
  */
 public class AvlTree<T extends Comparable<? super T>> {
@@ -45,7 +46,7 @@ public class AvlTree<T extends Comparable<? super T>> {
         }
     }
 
-    public AvlNode root;
+    private AvlNode root;
 
     /**
      * AvlTree 构造函数
